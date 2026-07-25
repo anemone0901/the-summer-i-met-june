@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Summer I Met June 🌲</title>
+    <style>
+        :root {
+            --bg-color: #e8f0ec;
+            --card-bg: #ffffff;
+            --forest-dark: #1b4332;
+            --forest-medium: #2d6a4f;
+            --forest-light: #52b788;
+            --forest-pale: #d8f3dc;
+            --accent-green: #74c69d;
+            --text-dark: #212529;
+            --text-muted: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(27, 67, 50, 0.1);
+            border-top: 6px solid var(--forest-dark);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--forest-dark);
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background: var(--forest-pale);
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 1px solid var(--forest-light);
+        }
+
+        h3 {
+            margin-top: 0;
+            font-size: 0.95rem;
+            color: var(--forest-dark);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        /* 1. Mood Scale */
+        .mood-options {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mood-btn {
+            background: #ffffff;
+            border: 2px solid var(--forest-light);
+            border-radius: 12px;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 3px;
+            transition: all 0.2s ease;
+            color: var(--forest-dark);
+        }
+
+        .mood-btn.selected {
+            background: var(--forest-medium);
+            color: #ffffff;
+            border-color: var(--forest-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(45, 106, 79, 0.3);
+        }
+
+        /* 2. Yes/No Happy Question */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            background: #ffffff;
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .choice-btn.selected-yes {
+            background: var(--forest-medium);
+            color: #ffffff;
+            border-color: var(--forest-dark);
+        }
+
+        .choice-btn.selected-no {
+            background: #d90429;
+            color: #ffffff;
+            border-color: #b7094c;
+        }
+
+        /* Inputs & Textarea */
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #b7e4c7;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-family: inherit;
+            margin-top: 5px;
+            outline: none;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--forest-medium);
+        }
+
+        textarea {
+            resize: none;
+            height: 90px;
+        }
+
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            background: var(--forest-dark);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+            background: var(--forest-medium);
+        }
+
+        .status-msg {
+            text-align: center;
+            color: var(--forest-medium);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>The Summer I Met June 🌲</h1>
+    <p class="subtitle">A peaceful space to reflect on your day</p>
+
+    <!-- 1. Mood Tracker (1-5) -->
+    <div class="card">
+        <h3>1. How's your mood today? (1-5)</h3>
+        <div class="mood-options">
+            <button class="mood-btn" onclick="selectMood(1)">1 😭</button>
+            <button class="mood-btn" onclick="selectMood(2)">2 😕</button>
+            <button class="mood-btn" onclick="selectMood(3)">3 😐</button>
+            <button class="mood-btn" onclick="selectMood(4)">4 😊</button>
+            <button class="mood-btn" onclick="selectMood(5)">5 🌿</button>
+        </div>
+    </div>
+
+    <!-- 2. Are you happy today? -->
+    <div class="card">
+        <h3>2. Are you happy today? 🍃</h3>
+        <div class="btn-group">
+            <button class="choice-btn" id="btn-yes" onclick="selectHappy('Yes')">Yes! ✨</button>
+            <button class="choice-btn" id="btn-no" onclick="selectHappy('No')">Not really 🌧️</button>
+        </div>
+    </div>
+
+    <!-- 3. Daily Updates -->
+    <div class="card">
+        <h3>3. What have you been up to today? 🏃‍♂️</h3>
+        <textarea id="activity-input" placeholder="Share what you did or spent time on today..."></textarea>
+    </div>
+
+    <!-- 4. Mini Diary -->
+    <div class="card">
+        <h3>4. Daily Journal 📖</h3>
+        <textarea id="diary-input" placeholder="Express your thoughts and feelings here..."></textarea>
+    </div>
+
+    <!-- 5. Song Recommendation -->
+    <div class="card">
+        <h3>5. Song Recommendation of the Day 🎧</h3>
+        <input type="text" id="song-input" placeholder="Song Title - Artist">
+    </div>
+
+    <!-- Save Button -->
+    <button class="save-btn" onclick="saveData()">Save Today's Entry 🌲</button>
+    <p class="status-msg" id="status-msg">Your journal has been saved! 🌿</p>
+</div>
+
+<script>
+    let selectedMood = null;
+    let isHappy = null;
+
+    function selectMood(val) {
+        selectedMood = val;
+        let btns = document.querySelectorAll('.mood-btn');
+        btns.forEach((btn, idx) => {
+            if(idx + 1 === val) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+    }
+
+    function selectHappy(val) {
+        isHappy = val;
+        let btnYes = document.getElementById('btn-yes');
+        let btnNo = document.getElementById('btn-no');
+
+        if(val === 'Yes') {
+            btnYes.classList.add('selected-yes');
+            btnNo.classList.remove('selected-no');
+        } else {
+            btnNo.classList.add('selected-no');
+            btnYes.classList.remove('selected-yes');
+        }
+    }
+
+    function saveData() {
+        let activity = document.getElementById('activity-input').value;
+        let diary = document.getElementById('diary-input').value;
+        let song = document.getElementById('song-input').value;
+
+        let todayData = {
+            mood: selectedMood,
+            happy: isHappy,
+            activity: activity,
+            diary: diary,
+            song: song,
+            date: new Date().toLocaleDateString('en-US')
+        };
+
+        localStorage.setItem('junDailyData', JSON.stringify(todayData));
+
+        let msg = document.getElementById('status-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 2500);
+    }
+
+    window.onload = function() {
+        let saved = localStorage.getItem('junDailyData');
+        if(saved) {
+            let data = JSON.parse(saved);
+            if(data.mood) selectMood(data.mood);
+            if(data.happy) selectHappy(data.happy);
+            if(data.activity) document.getElementById('activity-input').value = data.activity;
+            if(data.diary) document.getElementById('diary-input').value = data.diary;
+            if(data.song) document.getElementById('song-input').value = data.song;
+        }
+    }
+</script>
+
+</body>
+</html>
